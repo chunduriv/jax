@@ -3389,7 +3389,30 @@ def squeeze(array: ArrayLike, dimensions: Sequence[int]) -> Array:
   return squeeze_p.bind(array, dimensions=dimensions)
 
 def expand_dims(array: ArrayLike, dimensions: Sequence[int]) -> Array:
-  """Insert any number of size 1 dimensions into an array."""
+  """Expands the shape of an array by inserting new dimensions of size 1.
+
+  This function lowers directly to the `reshape`_ operation.
+
+  Args:
+    array: the array to expand.
+    dimensions: a sequence of integers, each giving the dimension index in the
+      result where a new size 1 dimension should be inserted. Dimension indices
+      must be unique and in ascending order.
+
+  Returns:
+    An array with the same elements as ``array``, but with the sizes of specified
+    ``dimensions`` inserted as size-1 dimensions.
+
+  Examples:
+    >>> import jax.numpy as jnp
+    >>> x = jnp.array([1, 2, 3])
+    >>> jnp.expand_dims(x, (0, 2))
+    Array([[[1],
+            [2],
+            [3]]], dtype=int32)
+
+  .. _reshape: https://www.tensorflow.org/xla/operation_semantics#reshape
+  """
   if len(set(dimensions)) != len(dimensions):
     raise ValueError(f'repeated axis in lax.expand_dims: {dimensions}')
   ndim_out = np.ndim(array) + len(dimensions)
